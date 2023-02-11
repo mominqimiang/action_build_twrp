@@ -51,13 +51,20 @@ jobs:
         echo "::set-output name=use_omin_head::$(jq -r '.use_omin_head' config.json)"
         echo "::set-output name=date::$(date +%F)"
       id: var
+    - name: set cache
+     run: |
+        export USE_CCACHE=1
+        export CCACHE_DIR=/mnt/seagate_drive
+        source ~/.bashrc
+        ccache -M 50G
+        source ~/.bashrc
       
     - name: Install Repo
       run: |
         mkdir -p ~/bin
-        curl https://mirrors.tuna.tsinghua.edu.cn/git/git-repo > ~/bin/repo
-        sudo cp ~/bin/repo /bin/repo
-        sudo chmod a+x /bin/repo
+        sudo curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/bin/repo
+sudo chmod +x /usr/bin/repo
+        sudo chmod +x /usr/bin/repo
         export PATH=~/bin:$PATH
         
     - name: Initialize Repair Manifest
